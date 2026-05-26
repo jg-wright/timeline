@@ -8,6 +8,7 @@
     "allowJs": true,
     "outDir": "dist",
     "rootDir": "src",
+    "types": ["bun", "js-yaml"],
 
     // Bundler mode
     "moduleResolution": "bundler",
