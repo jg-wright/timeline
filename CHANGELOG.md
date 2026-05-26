@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/jg-wright/timeline/compare/v4.0.0...v4.0.1) (2026-05-26)
+
+
+### Bug Fixes
+
+* ensure module annotation ([f250ae0](https://github.com/jg-wright/timeline/commit/f250ae00d1d4925c7cea219a3643a7604a623cd1))
+
 ## [4.0.0](https://github.com/johngeorgewright/timeline/compare/v3.0.1...v4.0.0) (2026-01-22)
 
 
