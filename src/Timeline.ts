@@ -1,17 +1,17 @@
-import { asyncIterableReduce, search } from './util'
-import { TimelineItemBoolean } from './TimelineItem/TimelineItemBoolean'
-import { TimelineItemClose } from './TimelineItem/TimelineItemClose'
-import { TimelineItemError } from './TimelineItem/TimelineItemError'
-import { TimelineItemNeverReach } from './TimelineItem/TimelineItemNeverReach'
-import { TimelineItemNull } from './TimelineItem/TimelineItemNull'
-import { TimelineItemTimer } from './TimelineItem/TimelineItemTimer'
-import { TimelineItemDefault } from './TimelineItem/TimelineItemDefault'
-import { TimelineItemDash } from './TimelineItem/TimelineItemDash'
+import { asyncIterableReduce, search } from './util.js'
+import { TimelineItemBoolean } from './TimelineItem/TimelineItemBoolean.js'
+import { TimelineItemClose } from './TimelineItem/TimelineItemClose.js'
+import { TimelineItemError } from './TimelineItem/TimelineItemError.js'
+import { TimelineItemNeverReach } from './TimelineItem/TimelineItemNeverReach.js'
+import { TimelineItemNull } from './TimelineItem/TimelineItemNull.js'
+import { TimelineItemTimer } from './TimelineItem/TimelineItemTimer.js'
+import { TimelineItemDefault } from './TimelineItem/TimelineItemDefault.js'
+import { TimelineItemDash } from './TimelineItem/TimelineItemDash.js'
 import {
   TimelineItem,
   type TimelineParsable,
-} from './TimelineItem/TimelineItem'
-import { TimelineItemInstance } from './TimelineItem/TimelineItemInstance'
+} from './TimelineItem/TimelineItem.js'
+import { TimelineItemInstance } from './TimelineItem/TimelineItemInstance.js'
 
 /**
  * The configured Timeline parsers.
@@ -55,8 +55,7 @@ export type ParsedTimelineItemValue<
  */
 export class Timeline<
   Parsers extends TimelineParsable<TimelineItem<unknown>>[] = DefaultParsers,
-> implements AsyncIterableIterator<ParsedTimelineItem<Parsers>>
-{
+> implements AsyncIterableIterator<ParsedTimelineItem<Parsers>> {
   readonly #unparsed: string
   readonly #parsed: ParsedTimelineItem<Parsers>[]
   readonly #Parsers: Parsers

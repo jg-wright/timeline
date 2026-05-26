@@ -1,5 +1,5 @@
 import { outerface } from '@johngw/outerface'
-import { type TimelineParsable, TimelineItem } from './TimelineItem'
+import { type TimelineParsable, TimelineItem } from './TimelineItem.js'
 
 /**
  * Represents the shorthand for a boolean value, in a timeline.

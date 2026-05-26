@@ -1,5 +1,5 @@
 import { outerface } from '@johngw/outerface'
-import { TimelineItem, type TimelineParsable } from './TimelineItem'
+import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
 
 /**
  * A timeline item, with the value of `null` that is generated

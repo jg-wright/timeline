@@ -1,5 +1,5 @@
 import { outerface } from '@johngw/outerface'
-import { type TimelineParsable, TimelineItem } from './TimelineItem'
+import { type TimelineParsable, TimelineItem } from './TimelineItem.js'
 
 /**
  * Represents an error in the timeline.

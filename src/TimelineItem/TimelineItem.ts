@@ -1,4 +1,4 @@
-import { timeout } from '../util'
+import { timeout } from '../util.js'
 import type { Outerface } from '@johngw/outerface'
 
 /**

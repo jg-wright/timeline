@@ -1,4 +1,4 @@
-import { asyncIterableToArray } from '../src/util'
+import { asyncIterableToArray } from '../src/util.js'
 import { outerface } from '@johngw/outerface'
 import {
   CloseTimeline,

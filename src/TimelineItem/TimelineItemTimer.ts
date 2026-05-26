@@ -1,6 +1,6 @@
-import { timeout } from '../util'
+import { timeout } from '../util.js'
 import { outerface } from '@johngw/outerface'
-import { TimelineItem, type TimelineParsable } from './TimelineItem'
+import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
 
 /**
  * A timeline item that represents a timer.
