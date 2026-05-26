@@ -10,7 +10,7 @@ import {
   TimelineItem,
   type TimelineParsable,
 } from '@johngw/timeline'
-import { beforeEach, expect, test } from 'vitest'
+import { beforeEach, expect, test } from 'bun:test'
 
 let timeline: Timeline
 
