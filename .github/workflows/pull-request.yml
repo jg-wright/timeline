@@ -4,6 +4,10 @@ on:
   pull_request:
   workflow_call:
 
+concurrency:
+  cancel-in-progress: true
+  group: pull-request-${{ github.head_ref }}
+
 jobs:
   test:
     name: Test
