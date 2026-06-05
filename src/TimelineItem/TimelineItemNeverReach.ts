@@ -1,5 +1,9 @@
 import { outerface } from '@johngw/outerface'
-import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
+import {
+  TimelineItem,
+  type TimelineItemOptions,
+  type TimelineParsable,
+} from './TimelineItem.js'
 
 /**
  * A timeline item that should never be reached.
@@ -11,8 +15,8 @@ import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
 export class TimelineItemNeverReach extends TimelineItem<NeverReachTimelineError> {
   #error: NeverReachTimelineError
 
-  constructor() {
-    super('X')
+  constructor(options: TimelineItemOptions) {
+    super('X', options)
     this.#error = new NeverReachTimelineError()
   }
 
@@ -26,9 +30,9 @@ export class TimelineItemNeverReach extends TimelineItem<NeverReachTimelineError
 
   static readonly #regexp = this.createItemRegExp(/X/)
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     return this.#regexp.test(timeline)
-      ? ([new TimelineItemNeverReach(), timeline.slice(1)] as const)
+      ? ([new TimelineItemNeverReach(options), timeline.slice(1)] as const)
       : undefined
   }
 }

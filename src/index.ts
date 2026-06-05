@@ -1,3 +1,4 @@
+export * from './Clock.js'
 export * from './Timeline.js'
 export * from './TimelineItem/TimelineItem.js'
 export * from './TimelineItem/TimelineItemBoolean.js'

@@ -6,6 +6,7 @@
   "sideEffects": false,
   "exports": {
     ".": "./dist/index.js",
+    "./Clock": "./dist/Clock.js",
     "./Timeline": "./dist/Timeline.js",
     "./TimelineItem": "./dist/TimelineItem/TimelineItem.js",
     "./TimelineItemBoolean": "./dist/TimelineItem/TimelineItemBoolean.js",

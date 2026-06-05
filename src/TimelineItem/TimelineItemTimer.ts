@@ -1,6 +1,10 @@
-import { timeout } from '../util.js'
+import { Clock, type Clockable } from '../Clock.js'
 import { outerface } from '@johngw/outerface'
-import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
+import {
+  TimelineItem,
+  type TimelineItemOptions,
+  type TimelineParsable,
+} from './TimelineItem.js'
 
 /**
  * A timeline item that represents a timer.
@@ -14,9 +18,9 @@ import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
 export class TimelineItemTimer extends TimelineItem<TimelineTimer> {
   #timer: TimelineTimer
 
-  constructor(ms: number) {
-    super(`T${ms}`)
-    this.#timer = new TimelineTimer(ms)
+  constructor(ms: number, options: TimelineItemOptions) {
+    super(`T${ms}`, options)
+    this.#timer = new TimelineTimer(ms, this.clock)
   }
 
   override get finished(): boolean {
@@ -34,11 +38,11 @@ export class TimelineItemTimer extends TimelineItem<TimelineTimer> {
 
   static readonly #regex = this.createItemRegExp(/(T(\d+))/)
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.#regex.exec(timeline)
     return result
       ? ([
-          new TimelineItemTimer(Number(result[2])),
+          new TimelineItemTimer(Number(result[2]), options),
           timeline.slice(result[1]!.length),
         ] as const)
       : undefined
@@ -47,6 +51,11 @@ export class TimelineItemTimer extends TimelineItem<TimelineTimer> {
 
 /**
  * Represents a timer in a timeline.
+ *
+ * @remarks
+ * Backed by a virtual {@link Clock} rather than wall-clock time, so a
+ * timer of `ms` frames finishes exactly when the clock has advanced `ms`
+ * frames since it started — deterministically, on every run.
  */
 export class TimelineTimer {
   #state:
@@ -63,18 +72,20 @@ export class TimelineTimer {
   }
 
   readonly #ms: number
+  readonly #clock: Clockable
 
-  constructor(ms: number) {
+  constructor(ms: number, clock: Clockable = new Clock()) {
     this.#ms = ms
+    this.#clock = clock
   }
 
   start() {
-    const start = Date.now()
+    const start = this.#clock.now
     this.#state = {
       started: true,
       start,
       end: start + this.#ms,
-      promise: timeout(this.#ms),
+      promise: this.#clock.wait(this.#ms),
     }
   }
 
@@ -99,7 +110,7 @@ export class TimelineTimer {
   }
 
   get timeLeft() {
-    return this.#state.started ? this.#state.end - Date.now() : undefined
+    return this.#state.started ? this.#state.end - this.#clock.now : undefined
   }
 
   get started() {

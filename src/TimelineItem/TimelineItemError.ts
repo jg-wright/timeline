@@ -1,5 +1,9 @@
 import { outerface } from '@johngw/outerface'
-import { type TimelineParsable, TimelineItem } from './TimelineItem.js'
+import {
+  type TimelineItemOptions,
+  type TimelineParsable,
+  TimelineItem,
+} from './TimelineItem.js'
 
 /**
  * Represents an error in the timeline.
@@ -11,8 +15,8 @@ import { type TimelineParsable, TimelineItem } from './TimelineItem.js'
 export class TimelineItemError extends TimelineItem<TimelineError> {
   #error: TimelineError
 
-  constructor(message?: string) {
-    super(message === undefined ? 'E' : `E(${message})`)
+  constructor(message: string | undefined, options: TimelineItemOptions) {
+    super(message === undefined ? 'E' : `E(${message})`, options)
     this.#error = new TimelineError(message)
   }
 
@@ -22,11 +26,11 @@ export class TimelineItemError extends TimelineItem<TimelineError> {
 
   static readonly #regexp = this.createItemRegExp(/(E(?:\(([^)]*)\))?)/)
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.#regexp.exec(timeline)
     return result
       ? ([
-          new TimelineItemError(result[2]),
+          new TimelineItemError(result[2], options),
           timeline.slice(result[1]!.length),
         ] as const)
       : undefined

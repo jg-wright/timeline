@@ -1,5 +1,9 @@
 import { outerface } from '@johngw/outerface'
-import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
+import {
+  TimelineItem,
+  type TimelineItemOptions,
+  type TimelineParsable,
+} from './TimelineItem.js'
 
 /**
  * A timeline item, with the value of `null` that is generated
@@ -7,8 +11,8 @@ import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
  */
 @outerface<TimelineParsable<TimelineItemNull>>()
 export class TimelineItemNull extends TimelineItem<null> {
-  constructor() {
-    super('N')
+  constructor(options: TimelineItemOptions) {
+    super('N', options)
   }
 
   get() {
@@ -17,9 +21,9 @@ export class TimelineItemNull extends TimelineItem<null> {
 
   static readonly #regex = this.createItemRegExp(/N/)
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     return this.#regex.test(timeline)
-      ? ([new TimelineItemNull(), timeline.slice(1)] as const)
+      ? ([new TimelineItemNull(options), timeline.slice(1)] as const)
       : undefined
   }
 }

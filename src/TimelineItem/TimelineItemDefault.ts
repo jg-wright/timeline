@@ -1,6 +1,10 @@
 import { takeCharsUntil } from '../util.js'
 import yaml from 'js-yaml'
-import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
+import {
+  TimelineItem,
+  type TimelineItemOptions,
+  type TimelineParsable,
+} from './TimelineItem.js'
 import { outerface } from '@johngw/outerface'
 
 /**
@@ -15,8 +19,8 @@ export type TimelineItemDefaultValue = any
 export class TimelineItemDefault extends TimelineItem<TimelineItemDefaultValue> {
   #value: TimelineItemDefaultValue
 
-  constructor(timeline: string) {
-    super(timeline)
+  constructor(timeline: string, options: TimelineItemOptions) {
+    super(timeline, options)
     this.#value = yaml.load(timeline) as TimelineItemDefaultValue
   }
 
@@ -24,11 +28,11 @@ export class TimelineItemDefault extends TimelineItem<TimelineItemDefaultValue> 
     return this.#value
   }
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const unparsed = takeCharsUntil(timeline, '-')
     return unparsed.length
       ? ([
-          new TimelineItemDefault(unparsed),
+          new TimelineItemDefault(unparsed, options),
           timeline.slice(unparsed.length),
         ] as const)
       : undefined
