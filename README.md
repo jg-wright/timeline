@@ -217,7 +217,7 @@ import {
 
 @outerface<TimelineParsable<FooBarTimelineItem>>()
 export class FooBarTimelineItem extends TimelineItem<string> {
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.createItemRegExp('(FOO)').exec(timeline)
     return result
       ? [
@@ -243,7 +243,7 @@ import {
 
 @outerface<TimelineParsable<FooBarTimelineItem>>()
 export class FooBarTimelineItem extends TimelineItem<string> {
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.createItemRegExp('(FOO)').exec(timeline)
     return result
       ? [
@@ -292,7 +292,7 @@ import {
 
 @outerface<TimelineParsable<FooBarTimelineItem>>()
 export class FooBarTimelineItem extends TimelineItem<string> {
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.createItemRegExp('(FOO)').exec(timeline)
     return result
       ? [
@@ -327,7 +327,7 @@ import {
 
 @outerface<TimelineParsable<FooBarTimelineItem>>()
 export class FooBarTimelineItem extends TimelineItem<string> {
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.createItemRegExp('(FOO)').exec(timeline)
     return result
       ? [

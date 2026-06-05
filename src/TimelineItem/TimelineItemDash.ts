@@ -14,7 +14,7 @@ import {
  */
 @outerface<TimelineParsable<TimelineItemDash>>()
 export class TimelineItemDash extends TimelineItem<undefined> {
-  constructor(options?: TimelineItemOptions) {
+  constructor(options: TimelineItemOptions) {
     super('-', options)
   }
 
@@ -26,7 +26,7 @@ export class TimelineItemDash extends TimelineItem<undefined> {
     return true
   }
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     return timeline.startsWith('-')
       ? ([new TimelineItemDash(options), timeline.slice(1)] as const)
       : undefined

@@ -15,7 +15,7 @@ import {
 export class TimelineItemInstance extends TimelineItem<TimelineInstanceOf> {
   #name: string
 
-  constructor(name: string, options?: TimelineItemOptions) {
+  constructor(name: string, options: TimelineItemOptions) {
     super(`<${name}>`, options)
     this.#name = name
   }
@@ -26,7 +26,7 @@ export class TimelineItemInstance extends TimelineItem<TimelineInstanceOf> {
 
   static readonly #regexp = this.createItemRegExp(/(<(\w+)>)/)
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.#regexp.exec(timeline)
     return result
       ? ([

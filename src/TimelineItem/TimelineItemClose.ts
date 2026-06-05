@@ -23,7 +23,7 @@ export type CloseTimeline = typeof CloseTimeline
  */
 @outerface<TimelineParsable<TimelineItemClose>>()
 export class TimelineItemClose extends TimelineItem<CloseTimeline> {
-  constructor(options?: TimelineItemOptions) {
+  constructor(options: TimelineItemOptions) {
     super('|', options)
   }
 
@@ -37,7 +37,7 @@ export class TimelineItemClose extends TimelineItem<CloseTimeline> {
 
   static readonly #regexp = this.createItemRegExp(/\|/)
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     return this.#regexp.test(timeline)
       ? ([new TimelineItemClose(options), timeline.slice(1)] as const)
       : undefined

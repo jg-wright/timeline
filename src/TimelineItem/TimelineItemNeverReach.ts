@@ -15,7 +15,7 @@ import {
 export class TimelineItemNeverReach extends TimelineItem<NeverReachTimelineError> {
   #error: NeverReachTimelineError
 
-  constructor(options?: TimelineItemOptions) {
+  constructor(options: TimelineItemOptions) {
     super('X', options)
     this.#error = new NeverReachTimelineError()
   }
@@ -30,7 +30,7 @@ export class TimelineItemNeverReach extends TimelineItem<NeverReachTimelineError
 
   static readonly #regexp = this.createItemRegExp(/X/)
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     return this.#regexp.test(timeline)
       ? ([new TimelineItemNeverReach(options), timeline.slice(1)] as const)
       : undefined

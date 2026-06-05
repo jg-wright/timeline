@@ -18,7 +18,7 @@ import {
 export class TimelineItemTimer extends TimelineItem<TimelineTimer> {
   #timer: TimelineTimer
 
-  constructor(ms: number, options?: TimelineItemOptions) {
+  constructor(ms: number, options: TimelineItemOptions) {
     super(`T${ms}`, options)
     this.#timer = new TimelineTimer(ms, this.clock)
   }
@@ -38,7 +38,7 @@ export class TimelineItemTimer extends TimelineItem<TimelineTimer> {
 
   static readonly #regex = this.createItemRegExp(/(T(\d+))/)
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.#regex.exec(timeline)
     return result
       ? ([

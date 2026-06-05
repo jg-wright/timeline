@@ -19,7 +19,7 @@ export type TimelineItemDefaultValue = any
 export class TimelineItemDefault extends TimelineItem<TimelineItemDefaultValue> {
   #value: TimelineItemDefaultValue
 
-  constructor(timeline: string, options?: TimelineItemOptions) {
+  constructor(timeline: string, options: TimelineItemOptions) {
     super(timeline, options)
     this.#value = yaml.load(timeline) as TimelineItemDefaultValue
   }
@@ -28,7 +28,7 @@ export class TimelineItemDefault extends TimelineItem<TimelineItemDefaultValue> 
     return this.#value
   }
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const unparsed = takeCharsUntil(timeline, '-')
     return unparsed.length
       ? ([

@@ -15,7 +15,7 @@ import {
 export class TimelineItemError extends TimelineItem<TimelineError> {
   #error: TimelineError
 
-  constructor(message?: string, options?: TimelineItemOptions) {
+  constructor(message: string | undefined, options: TimelineItemOptions) {
     super(message === undefined ? 'E' : `E(${message})`, options)
     this.#error = new TimelineError(message)
   }
@@ -26,7 +26,7 @@ export class TimelineItemError extends TimelineItem<TimelineError> {
 
   static readonly #regexp = this.createItemRegExp(/(E(?:\(([^)]*)\))?)/)
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.#regexp.exec(timeline)
     return result
       ? ([

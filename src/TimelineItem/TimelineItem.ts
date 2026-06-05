@@ -24,10 +24,7 @@ export abstract class TimelineItem<T> {
     return this.#rawValue
   }
 
-  constructor(
-    rawValue: string,
-    { clock = new Clock() }: TimelineItemOptions = {},
-  ) {
+  constructor(rawValue: string, { clock = new Clock() }: TimelineItemOptions) {
     this.#rawValue = rawValue
     this.clock = clock
   }
@@ -123,6 +120,6 @@ export interface TimelineParsable<
    */
   parse(
     timelinePart: string,
-    options?: TimelineItemOptions,
+    options: TimelineItemOptions,
   ): undefined | readonly [timelineItem: T, restOfTimeline: string]
 }

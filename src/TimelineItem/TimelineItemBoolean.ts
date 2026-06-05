@@ -15,7 +15,7 @@ import {
 export class TimelineItemBoolean extends TimelineItem<boolean> {
   #value: boolean
 
-  constructor(rawValue: 'F' | 'T', options?: TimelineItemOptions) {
+  constructor(rawValue: 'F' | 'T', options: TimelineItemOptions) {
     super(rawValue, options)
     this.#value = rawValue === 'T'
   }
@@ -26,7 +26,7 @@ export class TimelineItemBoolean extends TimelineItem<boolean> {
 
   static readonly #regexp = this.createItemRegExp(/([FT])/)
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     const result = this.#regexp.exec(timeline)
     return result
       ? ([

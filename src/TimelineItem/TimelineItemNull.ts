@@ -11,7 +11,7 @@ import {
  */
 @outerface<TimelineParsable<TimelineItemNull>>()
 export class TimelineItemNull extends TimelineItem<null> {
-  constructor(options?: TimelineItemOptions) {
+  constructor(options: TimelineItemOptions) {
     super('N', options)
   }
 
@@ -21,7 +21,7 @@ export class TimelineItemNull extends TimelineItem<null> {
 
   static readonly #regex = this.createItemRegExp(/N/)
 
-  static parse(timeline: string, options?: TimelineItemOptions) {
+  static parse(timeline: string, options: TimelineItemOptions) {
     return this.#regex.test(timeline)
       ? ([new TimelineItemNull(options), timeline.slice(1)] as const)
       : undefined
