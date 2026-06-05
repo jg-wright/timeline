@@ -32,6 +32,17 @@ export class TimelineItemTimer extends TimelineItem<TimelineTimer> {
     return super.onReach()
   }
 
+  /**
+   * Passing a timer advances the clock by the timer's full duration — not
+   * the 1-frame-per-character default. This is what makes a `Tn` consume
+   * `n` frames of virtual time when a timeline is iterated, so a consumer
+   * never has to wait on {@link TimelineTimer.promise} (which, on a virtual
+   * clock, would deadlock: nothing advances the clock while you await it).
+   */
+  override async onPass() {
+    await this.clock.advance(this.#timer.ms)
+  }
+
   get() {
     return this.#timer
   }
