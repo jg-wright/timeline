@@ -11,6 +11,7 @@ import {
   TimelineInstanceOf,
   TimelineItem,
   type TimelineParsable,
+  type TimelineItemOptions,
 } from '@johngw/timeline'
 import { beforeEach, expect, test } from 'bun:test'
 
@@ -94,9 +95,9 @@ test('custom parser', async () => {
       return 'BAR' as const
     }
 
-    static parse(timeline: string) {
+    static parse(timeline: string, options: TimelineItemOptions) {
       return timeline.startsWith('FOO')
-        ? ([new FooParser('FOO'), timeline.slice(3)] as const)
+        ? ([new FooParser('FOO', options), timeline.slice(3)] as const)
         : undefined
     }
   }
