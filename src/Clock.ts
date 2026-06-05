@@ -50,6 +50,38 @@ export interface Clockable {
  * const expected = Timeline.create('-----T10-2--', { clock })
  * ```
  */
+let defaultClock: Clockable | undefined
+
+/**
+ * The ambient {@link Clockable} a {@link Timeline} uses when none is passed
+ * explicitly.
+ *
+ * @remarks
+ * Sharing a clock is almost always what you want — a source, the code under
+ * test, and an expectation all need to advance together — so timelines
+ * default to this single ambient clock rather than a fresh one each. Replace
+ * it with {@link setDefaultClock} (e.g. a fake-timers-backed clock in a
+ * test), or override per timeline with `Timeline.create(str, { clock })`.
+ */
+export function getDefaultClock(): Clockable {
+  return (defaultClock ??= new Clock())
+}
+
+/**
+ * Sets the ambient {@link Clockable} returned by {@link getDefaultClock} and
+ * used by new timelines without an explicit `clock`.
+ *
+ * @returns a function that restores the previously-set default. Pair it with
+ * a test's teardown so the ambient clock doesn't leak between tests.
+ */
+export function setDefaultClock(clock: Clockable): () => void {
+  const previous = defaultClock
+  defaultClock = clock
+  return () => {
+    defaultClock = previous
+  }
+}
+
 export class Clock implements Clockable {
   #now = 0
   #waiters: { at: number; resolve: () => void }[] = []

@@ -1,4 +1,4 @@
-import { Clock, type Clockable } from '../Clock.js'
+import { getDefaultClock, type Clockable } from '../Clock.js'
 import { outerface } from '@johngw/outerface'
 import {
   TimelineItem,
@@ -38,9 +38,13 @@ export class TimelineItemTimer extends TimelineItem<TimelineTimer> {
    * `n` frames of virtual time when a timeline is iterated, so a consumer
    * never has to wait on {@link TimelineTimer.promise} (which, on a virtual
    * clock, would deadlock: nothing advances the clock while you await it).
+   *
+   * Advanced one frame at a time (like {@link TimelineItem.dash}) so each
+   * frame yields control — letting a timeline sharing this clock interleave
+   * in lock-step rather than the source jumping the whole duration at once.
    */
   override async onPass() {
-    await this.clock.advance(this.#timer.ms)
+    for (let i = 0; i < this.#timer.ms; i++) await this.clock.advance(1)
   }
 
   get() {
@@ -85,7 +89,7 @@ export class TimelineTimer {
   readonly #ms: number
   readonly #clock: Clockable
 
-  constructor(ms: number, clock: Clockable = new Clock()) {
+  constructor(ms: number, clock: Clockable = getDefaultClock()) {
     this.#ms = ms
     this.#clock = clock
   }

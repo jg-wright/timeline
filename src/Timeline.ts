@@ -1,5 +1,5 @@
 import { asyncIterableReduce, search } from './util.js'
-import { Clock, type Clockable } from './Clock.js'
+import { getDefaultClock, type Clockable } from './Clock.js'
 import { TimelineItemBoolean } from './TimelineItem/TimelineItemBoolean.js'
 import { TimelineItemClose } from './TimelineItem/TimelineItemClose.js'
 import { TimelineItemError } from './TimelineItem/TimelineItemError.js'
@@ -37,9 +37,9 @@ export type DefaultParsers = typeof DefaultParsers
  */
 export interface TimelineOptions {
   /**
-   * The {@link Clockable} that drives this timeline's timing. Pass the same
-   * instance to multiple timelines to advance them in lockstep so their
-   * timers line up deterministically. Defaults to a fresh {@link Clock}.
+   * The {@link Clockable} that drives this timeline's timing. Defaults to the
+   * shared ambient clock ({@link getDefaultClock}), so timelines coordinate
+   * by default. Pass an explicit clock to override it for this timeline.
    */
   clock?: Clockable
 }
@@ -82,7 +82,7 @@ export class Timeline<
     options: TimelineOptions = {},
   ) {
     this.#Parsers = Parsers
-    this.#clock = options.clock ?? new Clock()
+    this.#clock = options.clock ?? getDefaultClock()
     this.#unparsed = timeline.trim()
     this.#parsed = this.#parse()
   }
