@@ -1,6 +1,6 @@
 {
   "name": "@johngw/timeline",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "Parse a stream-like timeline of values",
   "type": "module",
   "sideEffects": false,

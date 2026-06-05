@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.0.0](https://github.com/jg-wright/timeline/compare/v4.0.1...v5.0.0) (2026-06-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* `TimelineParsable.parse` and `TimelineItem` constructors now accept a `TimelineItemOptions` argument; custom parsers should forward `options` to super so they share the timeline's clock. `TimelineTimer` is backed by a `Clockable` rather than real wall-clock time.
+
+### Features
+
+* drive timeline timing with a virtual clock instead of real timers ([07b3baf](https://github.com/jg-wright/timeline/commit/07b3baf3ec5a5eb5ffc9447465c98cf3cbce9eb9))
+* drive timeline timing with a virtual clock instead of real timers ([7e5298b](https://github.com/jg-wright/timeline/commit/7e5298be68c27ce1bb0c8c73492e3c2a65d7e112))
+
+
+### Bug Fixes
+
+* ensure outerface is correctly typed ([5c8b70d](https://github.com/jg-wright/timeline/commit/5c8b70dbdce67259fa97b17b4e9a68848453caac))
+
 ## [4.0.1](https://github.com/jg-wright/timeline/compare/v4.0.0...v4.0.1) (2026-05-26)
 
 
