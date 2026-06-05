@@ -27,15 +27,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johngeorgewright/timeline.git"
+    "url": "git+https://github.com/jg-wright/timeline.git"
   },
   "keywords": [],
   "author": "John Wright <johngeorge.wright@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/johngeorgewright/timeline/issues"
+    "url": "https://github.com/jg-wright/timeline/issues"
   },
-  "homepage": "https://github.com/johngeorgewright/timeline#readme",
+  "homepage": "https://github.com/jg-wright/timeline#readme",
   "devDependencies": {
     "@commitlint/cli": "21.0.1",
     "@commitlint/config-conventional": "21.0.1",
