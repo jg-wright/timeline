@@ -126,6 +126,13 @@ test('consuming a timeline advances its clock one frame per dash', async () => {
   expect(timeline.clock.now).toBe(6)
 })
 
+test('passing a timer advances the clock by its full duration', async () => {
+  const timeline = Timeline.create('--T10--|')
+  await asyncIterableToArray(timeline)
+  // '-'(1) '-'(1) 'T10'(10) '-'(1) '-'(1) '|'(1) => 15 frames.
+  expect(timeline.clock.now).toBe(15)
+})
+
 test('timers finish deterministically off the shared clock, no real time', async () => {
   const clock = new Clock()
   const timeline = Timeline.create('T3--|', { clock })
