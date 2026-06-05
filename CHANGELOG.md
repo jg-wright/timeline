@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.1.0](https://github.com/jg-wright/timeline/compare/v5.0.0...v5.1.0) (2026-06-05)
+
+
+### Features
+
+* advance the clock by a timer's full duration when passed ([66993cc](https://github.com/jg-wright/timeline/commit/66993cc60a23a72b965369103d45db3ff9327115))
+* advance the clock by a timer's full duration when passed ([bb65777](https://github.com/jg-wright/timeline/commit/bb6577798f02e2ec5d813ad0a42b7b245614c2ce))
+
 ## [5.0.0](https://github.com/jg-wright/timeline/compare/v4.0.1...v5.0.0) (2026-06-05)
 
 
