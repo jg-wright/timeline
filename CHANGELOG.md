@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.2.0](https://github.com/jg-wright/timeline/compare/v5.1.0...v5.2.0) (2026-06-05)
+
+
+### Features
+
+* default timelines to a shared ambient clock, overridable per timeline ([308688e](https://github.com/jg-wright/timeline/commit/308688e88b4df8db30960eb1a28ec2d267459fca))
+* default timelines to a shared ambient clock, overridable per timeline ([12b74ca](https://github.com/jg-wright/timeline/commit/12b74ca869e4c9c4c8964aeb43534db6fb3dfe41))
+
 ## [5.1.0](https://github.com/jg-wright/timeline/compare/v5.0.0...v5.1.0) (2026-06-05)
 
 
