@@ -1,4 +1,4 @@
-import { Clock, type Clockable } from '../Clock.js'
+import { getDefaultClock, type Clockable } from '../Clock.js'
 import type { Outerface } from '@johngw/outerface'
 
 /**
@@ -8,7 +8,7 @@ export interface TimelineItemOptions {
   /**
    * The {@link Clockable} driving this item's timing. {@link Timeline}
    * passes its shared clock here so all of its items advance together.
-   * Defaults to a fresh, standalone {@link Clock}.
+   * Defaults to the shared ambient clock ({@link getDefaultClock}).
    */
   clock?: Clockable
 }
@@ -24,7 +24,10 @@ export abstract class TimelineItem<T> {
     return this.#rawValue
   }
 
-  constructor(rawValue: string, { clock = new Clock() }: TimelineItemOptions) {
+  constructor(
+    rawValue: string,
+    { clock = getDefaultClock() }: TimelineItemOptions,
+  ) {
     this.#rawValue = rawValue
     this.clock = clock
   }

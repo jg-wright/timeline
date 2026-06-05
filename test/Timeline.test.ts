@@ -4,7 +4,9 @@ import {
   Clock,
   type Clockable,
   CloseTimeline,
+  getDefaultClock,
   NeverReachTimelineError,
+  setDefaultClock,
   Timeline,
   TimelineError,
   TimelineTimer,
@@ -18,6 +20,9 @@ import { beforeEach, expect, test } from 'bun:test'
 let timeline: Timeline
 
 beforeEach(() => {
+  // Reset the ambient clock so each test starts from a fresh frame 0 (it's a
+  // shared singleton by default).
+  setDefaultClock(new Clock())
   timeline = Timeline.create(
     '--1--{foo: bar}--[a,b]--true--T--false--F--null--N--E--E(err foo)--T10--X--<Date>-|',
   )
@@ -158,6 +163,31 @@ test('a shared clock keeps two timelines in lockstep', () => {
   const source = Timeline.create('--1--2------', { clock })
   const expected = Timeline.create('-----T10-2--', { clock })
   expect(source.clock).toBe(expected.clock)
+})
+
+test('timelines share the ambient clock by default', () => {
+  const a = Timeline.create('--1--')
+  const b = Timeline.create('--2--')
+  expect(a.clock).toBe(getDefaultClock())
+  expect(a.clock).toBe(b.clock)
+})
+
+test('an explicit clock overrides the ambient default', () => {
+  const clock = new Clock()
+  const timeline = Timeline.create('--1--', { clock })
+  expect(timeline.clock).toBe(clock)
+  expect(timeline.clock).not.toBe(getDefaultClock())
+})
+
+test('setDefaultClock swaps the ambient clock and can restore it', () => {
+  const original = getDefaultClock()
+  const replacement = new Clock()
+
+  const restore = setDefaultClock(replacement)
+  expect(Timeline.create('--1--').clock).toBe(replacement)
+
+  restore()
+  expect(getDefaultClock()).toBe(original)
 })
 
 test('a timeline accepts any Clockable, not just the built-in Clock', async () => {
