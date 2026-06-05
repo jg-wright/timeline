@@ -1,4 +1,5 @@
 import { asyncIterableReduce, search } from './util.js'
+import { Clock, type Clockable } from './Clock.js'
 import { TimelineItemBoolean } from './TimelineItem/TimelineItemBoolean.js'
 import { TimelineItemClose } from './TimelineItem/TimelineItemClose.js'
 import { TimelineItemError } from './TimelineItem/TimelineItemError.js'
@@ -31,6 +32,19 @@ export const DefaultParsers = [
 export type DefaultParsers = typeof DefaultParsers
 
 /**
+ * Options accepted by {@link Timeline.create} and the {@link Timeline}
+ * constructor.
+ */
+export interface TimelineOptions {
+  /**
+   * The {@link Clockable} that drives this timeline's timing. Pass the same
+   * instance to multiple timelines to advance them in lockstep so their
+   * timers line up deterministically. Defaults to a fresh {@link Clock}.
+   */
+  clock?: Clockable
+}
+
+/**
  * The union of configured {@link TimelineItem} instances.
  */
 export type ParsedTimelineItem<
@@ -59,33 +73,56 @@ export class Timeline<
   readonly #unparsed: string
   readonly #parsed: ParsedTimelineItem<Parsers>[]
   readonly #Parsers: Parsers
+  readonly #clock: Clockable
   #position = -1
 
-  constructor(timeline: string, Parsers: Parsers) {
+  constructor(
+    timeline: string,
+    Parsers: Parsers,
+    options: TimelineOptions = {},
+  ) {
     this.#Parsers = Parsers
+    this.#clock = options.clock ?? new Clock()
     this.#unparsed = timeline.trim()
     this.#parsed = this.#parse()
   }
 
-  static create(timeline: string): Timeline<DefaultParsers>
+  static create(
+    timeline: string,
+    options?: TimelineOptions,
+  ): Timeline<DefaultParsers>
 
   static create<Parsers extends TimelineParsable<TimelineItem<unknown>>[]>(
     timeline: string,
     Items: Parsers,
+    options?: TimelineOptions,
   ): Timeline<[...Parsers, ...DefaultParsers]>
 
   static create<Parsers extends TimelineParsable<TimelineItem<unknown>>[]>(
     timeline: string,
-    Items?: Parsers,
+    ItemsOrOptions?: Parsers | TimelineOptions,
+    options?: TimelineOptions,
   ): Timeline<[...Parsers, ...DefaultParsers]> {
-    return new Timeline<[...Parsers, ...DefaultParsers]>(timeline, [
-      ...((Items || []) as Parsers),
-      ...DefaultParsers,
-    ])
+    const Items = Array.isArray(ItemsOrOptions) ? ItemsOrOptions : []
+    const resolvedOptions = Array.isArray(ItemsOrOptions)
+      ? options
+      : ItemsOrOptions
+    return new Timeline<[...Parsers, ...DefaultParsers]>(
+      timeline,
+      [...(Items as Parsers), ...DefaultParsers],
+      resolvedOptions,
+    )
   }
 
   get Parsers() {
     return this.#Parsers
+  }
+
+  /**
+   * The virtual {@link Clock} driving this timeline's timing.
+   */
+  get clock() {
+    return this.#clock
   }
 
   get position() {
@@ -174,7 +211,9 @@ ${' '.repeat(length)}^`
     let $timeline = this.#unparsed
 
     while ($timeline.length) {
-      const result = search(this.#Parsers, (Item) => Item.parse($timeline))
+      const result = search(this.#Parsers, (Item) =>
+        Item.parse($timeline, { clock: this.#clock }),
+      )
       if (!result)
         throw new Error(
           `Cannot find a TimelineParsable capable of parsing ${$timeline}`,

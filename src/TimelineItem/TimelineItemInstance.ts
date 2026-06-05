@@ -1,5 +1,9 @@
 import { outerface } from '@johngw/outerface'
-import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
+import {
+  TimelineItem,
+  type TimelineItemOptions,
+  type TimelineParsable,
+} from './TimelineItem.js'
 
 /**
  * A timeline item that would represent an instance of something.
@@ -11,8 +15,8 @@ import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
 export class TimelineItemInstance extends TimelineItem<TimelineInstanceOf> {
   #name: string
 
-  constructor(name: string) {
-    super(`<${name}>`)
+  constructor(name: string, options?: TimelineItemOptions) {
+    super(`<${name}>`, options)
     this.#name = name
   }
 
@@ -22,11 +26,11 @@ export class TimelineItemInstance extends TimelineItem<TimelineInstanceOf> {
 
   static readonly #regexp = this.createItemRegExp(/(<(\w+)>)/)
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options?: TimelineItemOptions) {
     const result = this.#regexp.exec(timeline)
     return result
       ? ([
-          new TimelineItemInstance(result[2]!),
+          new TimelineItemInstance(result[2]!, options),
           timeline.slice(result[1]!.length),
         ] as const)
       : undefined

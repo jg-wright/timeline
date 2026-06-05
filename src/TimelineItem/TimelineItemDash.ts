@@ -1,17 +1,21 @@
 import { outerface } from '@johngw/outerface'
-import { TimelineItem, type TimelineParsable } from './TimelineItem.js'
+import {
+  TimelineItem,
+  type TimelineItemOptions,
+  type TimelineParsable,
+} from './TimelineItem.js'
 
 /**
  * Represents a dash in a timeline.
  *
  * @remarks
- * A dash signifies nothing happening. However, under the hood,
- * it's a 1ms delay.
+ * A dash signifies nothing happening. Under the hood it advances the
+ * timeline's virtual {@link Clock} by a single frame.
  */
 @outerface<TimelineParsable<TimelineItemDash>>()
 export class TimelineItemDash extends TimelineItem<undefined> {
-  constructor() {
-    super('-')
+  constructor(options?: TimelineItemOptions) {
+    super('-', options)
   }
 
   get() {
@@ -22,9 +26,9 @@ export class TimelineItemDash extends TimelineItem<undefined> {
     return true
   }
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options?: TimelineItemOptions) {
     return timeline.startsWith('-')
-      ? ([new TimelineItemDash(), timeline.slice(1)] as const)
+      ? ([new TimelineItemDash(options), timeline.slice(1)] as const)
       : undefined
   }
 }

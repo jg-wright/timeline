@@ -1,6 +1,8 @@
 import { asyncIterableToArray } from '../src/util.js'
 import { outerface } from '@johngw/outerface'
 import {
+  Clock,
+  type Clockable,
   CloseTimeline,
   NeverReachTimelineError,
   Timeline,
@@ -113,6 +115,61 @@ test('custom parser', async () => {
     ...dashes(2),
     CloseTimeline,
   ])
+})
+
+test('consuming a timeline advances its clock one frame per dash', async () => {
+  const timeline = Timeline.create('--1--|')
+  expect(timeline.clock.now).toBe(0)
+  await asyncIterableToArray(timeline)
+  // 6 single-character items (-, -, 1, -, -, |), each passed as one frame.
+  expect(timeline.clock.now).toBe(6)
+})
+
+test('timers finish deterministically off the shared clock, no real time', async () => {
+  const clock = new Clock()
+  const timeline = Timeline.create('T3--|', { clock })
+
+  const { value } = await timeline.next()
+  const timer = value!.get() as TimelineTimer
+  expect(timer).toBeInstanceOf(TimelineTimer)
+
+  // Reached but not enough frames have elapsed yet.
+  expect(timer.started).toBe(true)
+  expect(timer.finished).toBe(false)
+  expect(timer.timeLeft).toBe(3)
+
+  // Advancing the shared clock — not wall time — finishes it.
+  clock.advance(3)
+  expect(timer.finished).toBe(true)
+  expect(timer.timeLeft).toBe(0)
+  await timer.promise
+})
+
+test('a shared clock keeps two timelines in lockstep', () => {
+  const clock = new Clock()
+  const source = Timeline.create('--1--2------', { clock })
+  const expected = Timeline.create('-----T10-2--', { clock })
+  expect(source.clock).toBe(expected.clock)
+})
+
+test('a timeline accepts any Clockable, not just the built-in Clock', async () => {
+  let now = 0
+  const clock: Clockable = {
+    get now() {
+      return now
+    },
+    wait: () => Promise.resolve(),
+    advance: (frames = 1) => {
+      now += frames
+    },
+  }
+
+  const timeline = Timeline.create('--|', { clock })
+  expect(timeline.clock).toBe(clock)
+
+  await asyncIterableToArray(timeline)
+  // '-', '-', '|' => one frame each.
+  expect(now).toBe(3)
 })
 
 function dashes(amount: number) {

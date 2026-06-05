@@ -1,18 +1,35 @@
-import { timeout } from '../util.js'
+import { Clock, type Clockable } from '../Clock.js'
 import type { Outerface } from '@johngw/outerface'
+
+/**
+ * Options shared by every {@link TimelineItem} constructor.
+ */
+export interface TimelineItemOptions {
+  /**
+   * The {@link Clockable} driving this item's timing. {@link Timeline}
+   * passes its shared clock here so all of its items advance together.
+   * Defaults to a fresh, standalone {@link Clock}.
+   */
+  clock?: Clockable
+}
 
 /**
  * The base class of a timeline item.
  */
 export abstract class TimelineItem<T> {
   #rawValue: string
+  protected readonly clock: Clockable
 
   get rawValue() {
     return this.#rawValue
   }
 
-  constructor(rawValue: string) {
+  constructor(
+    rawValue: string,
+    { clock = new Clock() }: TimelineItemOptions = {},
+  ) {
     this.#rawValue = rawValue
+    this.clock = clock
   }
 
   /**
@@ -41,8 +58,12 @@ export abstract class TimelineItem<T> {
     for (let i = 0; i < length; i++) await this.dash()
   }
 
-  protected dash() {
-    return timeout(1)
+  protected async dash() {
+    // Advancing the clock is the unit of timeline time. Awaiting it yields
+    // to the microtask queue — so any timeline sharing this clock can react
+    // to the frame — and lets a real/fake-timer-backed clock flush pending
+    // timer callbacks before the next frame.
+    await this.clock.advance(1)
   }
 
   /**
@@ -94,8 +115,14 @@ export interface TimelineParsable<
    * Returns a binary tuple where:
    * 1. the 1st item is the parsed {@link TimelineItem}
    * 2. the 2nd item is the **rest** of the unparsed timeline
+   *
+   * @param timelinePart - the unparsed timeline, from the current position
+   * @param options - forwarded to the constructed item; pass `options.clock`
+   *   through to `super`/the item constructor so it shares the timeline's
+   *   {@link Clock}.
    */
   parse(
     timelinePart: string,
+    options?: TimelineItemOptions,
   ): undefined | readonly [timelineItem: T, restOfTimeline: string]
 }

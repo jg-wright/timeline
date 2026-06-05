@@ -1,5 +1,9 @@
 import { outerface } from '@johngw/outerface'
-import { type TimelineParsable, TimelineItem } from './TimelineItem.js'
+import {
+  type TimelineItemOptions,
+  type TimelineParsable,
+  TimelineItem,
+} from './TimelineItem.js'
 
 /**
  * Represents the shorthand for a boolean value, in a timeline.
@@ -11,8 +15,8 @@ import { type TimelineParsable, TimelineItem } from './TimelineItem.js'
 export class TimelineItemBoolean extends TimelineItem<boolean> {
   #value: boolean
 
-  constructor(rawValue: 'F' | 'T') {
-    super(rawValue)
+  constructor(rawValue: 'F' | 'T', options?: TimelineItemOptions) {
+    super(rawValue, options)
     this.#value = rawValue === 'T'
   }
 
@@ -22,11 +26,11 @@ export class TimelineItemBoolean extends TimelineItem<boolean> {
 
   static readonly #regexp = this.createItemRegExp(/([FT])/)
 
-  static parse(timeline: string) {
+  static parse(timeline: string, options?: TimelineItemOptions) {
     const result = this.#regexp.exec(timeline)
     return result
       ? ([
-          new TimelineItemBoolean(result[1] as 'F' | 'T'),
+          new TimelineItemBoolean(result[1] as 'F' | 'T', options),
           timeline.slice(1),
         ] as const)
       : undefined
